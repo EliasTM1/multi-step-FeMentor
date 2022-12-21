@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link
+			rel="icon"
+			type="image/png"
+			sizes="32x32"
+			href="./assets/images/favicon-32x32.png"
+		/>
+
+		<title>Frontend Mentor | Multi-step form</title>
+
+		<link rel="stylesheet" href="styles.css" />
+	</head>
+	<body>
+		<section>
+			<div class="wrapper">
+				<div class="card-container">
+					<div class="steps-container">
+						<ul>
+							<li class="step">
+								<span class="step-number">1</span>
+								<div class="step-container">
+									<span>STEP 1</span>
+									<span id="step-name">YOUR INFO</span>
+								</div>
+							</li>
+							<li class="step">
+								<span class="step-number">2</span>
+								<div class="step-container">
+									<span>STEP 2</span>
+									<span id="step-name">SELECT PLAN</span>
+								</div>
+							</li>
+							<li class="step">
+								<span class="step-number">3</span>
+								<div class="step-container">
+									<span>STEP 3</span>
+									<span id="step-name">ADD-ONS</span>
+								</div>
+							</li>
+							<li class="step">
+								<span class="step-number">4</span>
+								<div class="step-container">
+									<span>STEP 4</span>
+									<span id="step-name">SUMMARY</span>
+								</div>
+							</li>
+						</ul>
+					</div>
+					<div class="form-container">
+						<h1 id="form-title">Personal info</h1>
+						<span id="form-description"
+							>Please provide yout name, email and phone number</span
+						>
+						<form>
+							<!-- * Step  1 -->
+							<!-- <div class="form-wrapper">
+							<label for="name">Name</label>
+							<input
+								required
+								type="text"
+								name="name"
+								placeholder="e.g. Stephen King"
+								id="usrName"
+							/>
+							<label for="email">Email Address</label>
+							<input
+								required
+								type="text"
+								name="email"
+								placeholder="e.g. stephenking@lorem.com"
+								id="email"
+							/>
+							<label for="phone">Phone Number</label>
+							<input
+								required
+								type="text"
+								name="phone"
+								placeholder="e.g. +1 234 567 890"
+								id="usrName"
+							/> -->
+							<!-- * frequency section -->
+							<div class="frequency-container">
+								<div class="package-container">
+									<img src="./assets/images/icon-arcade.svg" alt=":(" />
+									<span id="service">Arcade</span>
+									<span id="service-cost">$9/mo</span>
+								</div>
+								<div class="package-container">
+									<img src="./assets/images/icon-advanced.svg" alt=":(" />
+									<span id="service">Advances</span>
+									<span id="service-cost">$12/mo</span>
+								</div>
+								<div class="package-container">
+									<img src="./assets/images/icon-pro.svg" alt=":(" />
+									<span id="service">Pro</span>
+									<span id="service-cost">$15/mo</span>
+								</div>
+							</div>
+							<div>
+								<span>Montly</span>
+									<input
+                  class="toggle-switch"
+										type="checkbox"
+										onclick="myclick()"
+										name="switch"
+										id="switch"
+									/>
+									<label id="switch" for="switch"></label>
+								<span>Yearly</span>
+							</div>
+							<!-- * frequency section -->
+							<button>Next Step</button>
+							<button>Go back</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</section>
+	</body>
+	<script src="./index.js"></script>
+</html>
