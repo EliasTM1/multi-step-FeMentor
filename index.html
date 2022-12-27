@@ -52,63 +52,67 @@
 					</div>
 					<div class="form-container">
 						<!-- * Titles -->
-						<!-- <h1 id="form-title">Personal info</h1>
-              <span id="form-description">
-                Please provide yout name, email and phone number
-              </span> -->
+							<h1 id="form-title"></h1>
+							<span id="form-description">
+								
+							</span>
 						<form>
-							<!-- * Titles -->
 							<!-- * Step  1 -->
-							<!-- <div class="form-wrapper">
-							<label for="name">Name</label>
-							<input
-								required
-								type="text"
-								name="name"
-								placeholder="e.g. Stephen King"
-								id="usrName"
-							/>
-							<label for="email">Email Address</label>
-							<input
-								required
-								type="text"
-								name="email"
-								placeholder="e.g. stephenking@lorem.com"
-								id="email"
-							/>
-							<label for="phone">Phone Number</label>
-							<input
-								required
-								type="text"
-								name="phone"
-								placeholder="e.g. +1 234 567 890"
-								id="usrName"
-							/> -->
+							<div class="form-wrapper">
+								<div class="personal-data">
+									<label for="name">Name</label>
+									<!-- required -->
+									<input
+									type="text"
+									name="name"
+									placeholder="e.g. Stephen King"
+									id="usrName"
+									/>
+									<label for="email">Email Address</label>
+									<!-- required -->
+									<input
+									type="text"
+									name="email"
+									placeholder="e.g. stephenking@lorem.com"
+									id="usrMail"
+									/>
+									<label for="phone">Phone Number</label>
+									<!-- required -->
+									<input
+									type="text"
+									name="phone"
+									placeholder="e.g. +1 234 567 890"
+									id="usrPhone"
+									/>
+								</div>
+							<!-- * Step  1 finished -->
 							<!-- * frequency section -->
-							<!-- <div class="frequency-container">
-								<div class="package-container">
-									<img src="./assets/images/icon-arcade.svg" alt=":(" />
-									<span id="service">Arcade</span>
-									<span id="service-cost">$9/mo</span>
+							<div class="frequency-step">
+								<div class="frequency-container">
+									<div class="package-container" data-coreSubs="arcade" data-active="false">
+										<img src="./assets/images/icon-arcade.svg" alt=":(" />
+										<span id="service">Arcade</span>
+										<span id="service-cost">$9/mo</span>
+									</div>
+									<div class="package-container" data-coreSubs="advanced" data-active="false">
+										<img src="./assets/images/icon-advanced.svg" alt=":(" />
+										<span id="service">Advanced</span>
+										<span id="service-cost">$12/mo</span>
+									</div>
+									<div class="package-container" data-coreSubs="pro" data-active="false">
+										<img src="./assets/images/icon-pro.svg" alt=":(" />
+										<span id="service">Pro</span>
+										<span id="service-cost">$15/mo</span>
+									</div>
 								</div>
-								<div class="package-container">
-									<img src="./assets/images/icon-advanced.svg" alt=":(" />
-									<span id="service">Advances</span>
-									<span id="service-cost">$12/mo</span>
-								</div>
-								<div class="package-container">
-									<img src="./assets/images/icon-pro.svg" alt=":(" />
-									<span id="service">Pro</span>
-									<span id="service-cost">$15/mo</span>
+								<div>
+									<span>Montly</span>
+									<input id="toggle-switch" type="checkbox" value="monthly"/>
+									<span>Yearly</span>
 								</div>
 							</div>
-							<div>
-								<span>Montly</span>
-                  <input id="toggle-switch" type="checkbox">
-								<span>Yearly</span>
-							</div> -->
 							<!-- * frequency section -->
-							<!-- <div class="add-on-step">
+							<div class="add-on-step">
 								<div class="add-on">
 									<input type="checkbox" name="" id="" />
 									<div class="addon-description">
@@ -133,28 +137,28 @@
 									</div>
 									<span>+$2/mo</span>
 								</div>
-							</div> -->
+							</div>
 							<!-- * Frequency section finish -->
 							<!-- * TOTAL -->
-							<!-- <div class="finish-step">
-                <div class="resume">
+							<div class="finish-step">
+								<div class="resume">
 									<div>
-                    <div>
-                      <span> Arcade (Monthly) </span>
+										<div>
+											<span> Arcade (Monthly) </span>
 											<span> Change </span>
 										</div>
 										<div id="monthlyTotal">$9/mo</div>
 									</div>
 									<div id="addOnServices">
-                    <div>Online service<span>+$9/mo</span></div>
+										<div>Online service<span>+$9/mo</span></div>
 										<div>Online service<span>+$9/mo</span></div>
 									</div>
 								</div>
 								<div class="total-container">
-                  <span>Total (per month)</span>
+									<span>Total (per month)</span>
 									<span id="total">+/$12mo</span>
 								</div>
-							</div> -->
+							</div>
 							<!-- * TOTAL -->
 							<!-- * THANKS -->
 							<div class="thank-you">
@@ -176,5 +180,5 @@
 			</div>
 		</section>
 	</body>
-	<script src="./index.js"></script>
+	<script src="./index.js" type="module"></script>
 </html>

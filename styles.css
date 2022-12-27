@@ -64,8 +64,8 @@ section {
 	background-repeat: no-repeat;
 	border-radius: 10px;
 	color: white;
-	position: inherit;
-	left: 0.625rem;
+	position: absolute;
+	left: 1rem;
 }
 
 .steps-container ul {
@@ -110,10 +110,15 @@ section {
 }
 
 .form-container {
-	/* width: 100%; */
+    /* background-color: red; */
 	display: flex;
 	flex-direction: column;
-	margin-inline: 100px;
+    position: absolute;
+    right: 6.25rem;
+    top: 4rem;
+    bottom: .5rem;
+    width: 49%;
+    flex-grow: 3;
 }
 
 form {
@@ -126,8 +131,9 @@ form {
 	flex-direction: column;
 	width: 100%;
 }
-
-.title-step {
+.form-wrapper .personal-data {
+	display: none;
+	flex-direction: column;
 }
 
 #form-title {
@@ -166,7 +172,7 @@ form button {
 	border: none;
 	position: absolute;
 	bottom: 2rem;
-	right: 5.2rem;
+	right: 0;
     font-size: 1rem;
     cursor: pointer;
 }
@@ -196,6 +202,11 @@ form button {
 	border: 0.1rem solid #483eff;
 }
 
+.package-container-active {
+	background-color: rgb(72, 62, 255, 0.03);
+	border: 0.1rem solid #483eff;
+}
+
 .package-container img {
 	width: 40px;
 	height: 40px;
@@ -217,6 +228,11 @@ form button {
 	opacity: 0.3;
 }
 
+.frequency-step{
+    display: none;
+    flex-direction: column;
+}
+
 .frequency-container ~ div {
 	border-radius: 0.8rem;
 	background-color: rgb(72, 62, 255, 0.03);
@@ -225,15 +241,17 @@ form button {
 	justify-content: center;
 	padding: 1rem;
     font-family:  "UbuntuMedium";
+    height: 1rem;
 }
 
 #toggle-switch{
     appearance: none;
     position: relative;
-    width: 50px;
-    height: 30px;
+    width: 38px;
+    height: 20px;
     border-radius: 25px;
-    background-color: #ccc;
+    background-color: #022959;
+    /* background-color: red; */
     transition: background .3s;
     outline: none;
     cursor: pointer;
@@ -249,8 +267,8 @@ form button {
     left: 30%;
     transform: translate(-50%, -50%);
     border-radius: 50%;
-    height: 1.25rem;
-    width: 1.25rem;
+    height: 0.75rem;
+    width: 0.75rem;
     background-color: white;
     transition: left .3s;
 }
@@ -264,15 +282,23 @@ form button {
 }
 
 #back {
-    left: 20.3rem;
+    left: 0rem;
+    position: absolute;
     background-color: transparent;
     color: #9699AA;
     font-family: "UbuntuRegular";
     cursor: pointer;
+    width: fit-content;
+    padding: 0;
 }
 
 .confirm-btn {
     background-color: #483EFF;
+}
+
+.add-on-step{
+    display: none;
+    flex-direction: column;
 }
 
 .add-on {
@@ -340,7 +366,7 @@ form button {
 
 
 .finish-step{
-    display: flex;
+    display: none;
     flex-direction: column;
 }
 
@@ -351,7 +377,7 @@ form button {
 	flex-direction: column;
 	padding: 1.5rem 1.5rem 0rem 1.5rem;
     font-family:  "UbuntuMedium";
-    width: 450px;
+    width: 26.063rem;
     height: 182px;
     justify-content: space-around;
 }
@@ -421,7 +447,8 @@ form button {
     align-items: center;
     justify-content: space-between;
     margin-top: 1.5rem;
-    margin-inline: 1.5rem;
+    width: 26.875rem;
+    align-self: center;
 }
 
 .total-container > #total{
@@ -438,7 +465,7 @@ form button {
 }
 
 .thank-you{
-    display: flex;
+    display: none;
     flex-direction: column;
     align-content: center;
     width: 450px;
