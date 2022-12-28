@@ -1,3 +1,5 @@
+
+import { addOnServices, availablePlans } from "./stepsDefinitions.js";
 let personalInfoForm,
 	frequencyformStep,
 	addOnFormStep,
@@ -13,8 +15,10 @@ let personalInfoForm,
 	phoneField,
 	toggleSwitch,
 	coreSubs,
-	addOns;
-
+	addOns,
+	addOnInput,
+	billingPeriod
+	;
 
 let user = {
 	name: "",
@@ -54,22 +58,35 @@ coreSubs = document.querySelectorAll(".package-container");
 addOns = document.querySelectorAll(".add-on");
 // * Event Listeners
 nextButton.addEventListener("click", (e) => nextStep(e));
-coreSubs.forEach((div) => { 
+toggleSwitch.addEventListener("click", (e) => toggleSwitchState(e));
+coreSubs.forEach((div) => {
 	div.addEventListener("click", (event) => selectCoreSubscription(event));
 });
-addOns.forEach(addOn => {
-	addOn.addEventListener("click", (event) => includeAddOn(event))
-})
-
-toggleSwitch.addEventListener("click", (e) => toggleSwitchState(e));
+addOns.forEach((addOn) => {
+	addOn.addEventListener("click", (event) => includeAddOn(event));
+});
 
 
 
+function includeAddOn(addOnService) {
+	// addOnService.preventDefault();
+	addOnService.stopPropagation();
 
+	const clickedContainer = addOnService.target.closest(".add-on");
+	const textBox = clickedContainer.querySelector("input");
+	
+	if (addOnService.target.matches("input")){
+		textBox.checked = !textBox.checked;
+	}
+
+	if (clickedContainer.classList.contains("add-on") || addOnService.target.matches("div, span") || addOnService.target.matches("input")) {
+		clickedContainer.classList.toggle("package-container-active");
+		textBox.checked = !textBox.checked;
+	}
+}
 
 function toggleSwitchState(e) {
-	let billingPeriod, parentContainer, subscription;
-	console.log(e.target.value, "initial");
+	let parentContainer, subscription;
 	e.target.value === "monthly"
 		? (e.target.value = "yearly")
 		: (e.target.value = "monthly");
@@ -83,31 +100,16 @@ function toggleSwitchState(e) {
 		user.yearlySubscrition = true;
 	}
 
-	document.querySelectorAll("#service-cost").forEach((cost, index) => {
+	document.querySelectorAll("#service-cost").forEach((cost) => {
 		billingPeriod = toggleSwitch.value;
 		parentContainer = cost.closest(".package-container");
 		subscription = parentContainer.dataset.coresubs;
 		cost.textContent = availablePlans[subscription][billingPeriod];
 	});
+
 }
 
-let availablePlans = {
-	arcade: {
-		monthly: "$9/mo",
-		yearly: "$90/mo",
-		freeMonths: "2 months free",
-	},
-	advanced: {
-		monthly: "$12/mo",
-		yearly: "$120/mo",
-		freeMonths: "2 months free",
-	},
-	pro: {
-		monthly: "$15/mo",
-		yearly: "$150/mo",
-		freeMonths: "2 months free",
-	},
-};
+
 
 let formSteps = {
 	1: {
@@ -158,10 +160,9 @@ formSteps[3].afterComplete = formSteps[4].step;
 formSteps[4].afterComplete = formSteps[5].step;
 
 (function setIntialState() {
-	user.currentStep = formSteps[1];
+	user.currentStep = formSteps[2];
 	setStep(user.currentStep.step);
 })();
-
 
 function setStep(step) {
 	// * Hide nav buttons on last Step
@@ -198,7 +199,6 @@ function selectCoreSubscription(event) {
 		event.target.matches("img, span")
 	) {
 		coreSubs.forEach((divContainer) => {
-			console.log(divContainer);
 			if (divContainer.classList.contains("package-container-active")) {
 				divContainer.classList.remove("package-container-active");
 			}
@@ -211,8 +211,6 @@ function selectCoreSubscription(event) {
 	}
 }
 
-
-
 function storeFormData(step) {
 	switch (step) {
 		case formSteps[2].step:
@@ -222,15 +220,20 @@ function storeFormData(step) {
 			break;
 
 		case formSteps[3].step:
-			console.log("Saved plan selected");
+			
+			document.querySelectorAll("#addOnCost").forEach((addOnService, index) => {
+				let currentPlan = document.querySelectorAll(".addOnInput")
+				let subs = toggleSwitch.value
+				currentPlan = currentPlan[index].dataset.service
+				addOnService.textContent = addOnServices[currentPlan][subs];
+			});
+
 
 			break;
 		case formSteps[4].step:
-			console.log("saved Add ons");
 			// * set optional add ons
 			break;
 		case formSteps[5].step:
-			console.warn("Resume ok");
 			// * Show resume
 			break;
 	}

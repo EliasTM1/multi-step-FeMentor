@@ -204,7 +204,7 @@ form button {
 
 .package-container-active {
 	background-color: rgb(72, 62, 255, 0.03);
-	border: 0.1rem solid #483eff;
+	border: 0.1rem solid #483eff !important; 
 }
 
 .package-container img {

@@ -1,26 +1,32 @@
-export default STEPSDEFINITIONS = [
-    {
-        step: 1,
-        title: "Personal info",
-        subTitle: "Please provide your name, email address, and phone number.",
-        buttonText: "Next Step",
-    },
-    {
-        step: 2,
-        title: "Select your plan",
-        subTitle: "You have the option of monthly or yearly billing.",
-        buttonText: "Next Step",
-    },
-    {
-        step: 3,
-        title: "Pick add-ons",
-        subTitle: "Add-ons help enhance your gaming experience.",
-        buttonText: "Next Step",
-    },
-    {
-        step: 4,
-        title: "Finishing up",
-        subTitle: "Double-check everything looks OK before confirming.",
-        buttonText: "Next Step",
-    },
-]
+export const addOnServices = {
+	onlineService: {
+		monthly: "$1/mo",
+		yearly: "$10/yr",
+	},
+	largerStorage: {
+		monthly: "$2/mo",
+		yearly: "$20/mo",
+	},
+	customProfile: {
+		monthly: "$2/mo",
+		yearly: "$20/mo",
+	},
+};
+
+export const availablePlans = {
+	arcade: {
+		monthly: "$9/mo",
+		yearly: "$90/mo",
+		freeMonths: "2 months free",
+	},
+	advanced: {
+		monthly: "$12/mo",
+		yearly: "$120/mo",
+		freeMonths: "2 months free",
+	},
+	pro: {
+		monthly: "$15/mo",
+		yearly: "$150/mo",
+		freeMonths: "2 months free",
+	},
+};
