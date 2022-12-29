@@ -30,3 +30,19 @@ export const availablePlans = {
 		freeMonths: "2 months free",
 	},
 };
+
+export let user = {
+	name: "",
+	email: "",
+	phone: "",
+	currentStep: 0,
+	baseSubscription: "",
+	yearlySubscrition: false,
+	monthlySubscrition: false,
+	addOnServices: {
+		onlineService: false,
+		largerStorage: false,
+		customProfile: false,
+	},
+};
+

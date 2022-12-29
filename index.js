@@ -1,5 +1,5 @@
+import { addOnServices, availablePlans, user } from "./stepsDefinitions.js";
 
-import { addOnServices, availablePlans } from "./stepsDefinitions.js";
 let personalInfoForm,
 	frequencyformStep,
 	addOnFormStep,
@@ -17,23 +17,7 @@ let personalInfoForm,
 	coreSubs,
 	addOns,
 	addOnInput,
-	billingPeriod
-	;
-
-let user = {
-	name: "",
-	email: "",
-	phone: "",
-	currentStep: 0,
-	baseSubscription: "",
-	yearlySubscrition: false,
-	monthlySubscrition: false,
-	addOnServices: {
-		onlineService: false,
-		largerStorage: false,
-		customProfile: false,
-	},
-};
+	billingPeriod;
 
 // * Form steps
 personalInfoForm = document.querySelector(".personal-data");
@@ -41,21 +25,27 @@ frequencyformStep = document.querySelector(".frequency-step");
 addOnFormStep = document.querySelector(".add-on-step");
 finishStep = document.querySelector(".finish-step");
 thankYouStep = document.querySelector(".thank-you");
+
 // * Form Headers
 stepTitle = document.querySelector("#form-title");
 stepSubtitle = document.querySelector("#form-description");
+
 // * Form buttons
 nextButton = document.querySelector("#next");
 backButton = document.querySelector("#back");
+
 // * Personal form fields
 nameField = document.querySelector("#usrName");
 emailField = document.querySelector("#usrMail");
 phoneField = document.querySelector("#usrPhone");
+
 // * Frequency form fields
 toggleSwitch = document.querySelector("#toggle-switch");
 coreSubs = document.querySelectorAll(".package-container");
+
 // * Add ons
 addOns = document.querySelectorAll(".add-on");
+
 // * Event Listeners
 nextButton.addEventListener("click", (e) => nextStep(e));
 toggleSwitch.addEventListener("click", (e) => toggleSwitchState(e));
@@ -65,50 +55,6 @@ coreSubs.forEach((div) => {
 addOns.forEach((addOn) => {
 	addOn.addEventListener("click", (event) => includeAddOn(event));
 });
-
-
-
-function includeAddOn(addOnService) {
-	// addOnService.preventDefault();
-	addOnService.stopPropagation();
-
-	const clickedContainer = addOnService.target.closest(".add-on");
-	const textBox = clickedContainer.querySelector("input");
-	
-	if (addOnService.target.matches("input")){
-		textBox.checked = !textBox.checked;
-	}
-
-	if (clickedContainer.classList.contains("add-on") || addOnService.target.matches("div, span") || addOnService.target.matches("input")) {
-		clickedContainer.classList.toggle("package-container-active");
-		textBox.checked = !textBox.checked;
-	}
-}
-
-function toggleSwitchState(e) {
-	let parentContainer, subscription;
-	e.target.value === "monthly"
-		? (e.target.value = "yearly")
-		: (e.target.value = "monthly");
-
-	if (e.target.value === "monthly") {
-		user.monthlySubscrition = true;
-		user.yearlySubscrition = false;
-	}
-	if (e.target.value === "yearly") {
-		user.monthlySubscrition = false;
-		user.yearlySubscrition = true;
-	}
-
-	document.querySelectorAll("#service-cost").forEach((cost) => {
-		billingPeriod = toggleSwitch.value;
-		parentContainer = cost.closest(".package-container");
-		subscription = parentContainer.dataset.coresubs;
-		cost.textContent = availablePlans[subscription][billingPeriod];
-	});
-
-}
-
 
 
 let formSteps = {
@@ -152,17 +98,54 @@ let formSteps = {
 		formToHide: finishStep,
 	},
 };
-
 const formLength = Object.values(formSteps).length;
+
 formSteps[1].afterComplete = formSteps[2].step;
 formSteps[2].afterComplete = formSteps[3].step;
 formSteps[3].afterComplete = formSteps[4].step;
 formSteps[4].afterComplete = formSteps[5].step;
 
 (function setIntialState() {
-	user.currentStep = formSteps[2];
+	user.currentStep = formSteps[1];
 	setStep(user.currentStep.step);
 })();
+
+function includeAddOn(addOnService) {
+	const clickedContainer = addOnService.target.closest(".add-on");
+	const textBox = clickedContainer.querySelector("input");
+	
+	if (addOnService.target.matches("input")){
+		textBox.checked = !textBox.checked;
+	}
+
+	if (clickedContainer.classList.contains("add-on") || addOnService.target.matches("div, span") || addOnService.target.matches("input")) {
+		clickedContainer.classList.toggle("package-container-active");
+		textBox.checked = !textBox.checked;
+	}
+}
+
+function toggleSwitchState(e) {
+	let parentContainer, subscription;
+	e.target.value === "monthly"
+		? (e.target.value = "yearly")
+		: (e.target.value = "monthly");
+
+	if (e.target.value === "monthly") {
+		user.monthlySubscrition = true;
+		user.yearlySubscrition = false;
+	}
+	if (e.target.value === "yearly") {
+		user.monthlySubscrition = false;
+		user.yearlySubscrition = true;
+	}
+
+	document.querySelectorAll("#service-cost").forEach((cost) => {
+		billingPeriod = toggleSwitch.value;
+		parentContainer = cost.closest(".package-container");
+		subscription = parentContainer.dataset.coresubs;
+		cost.textContent = availablePlans[subscription][billingPeriod];
+	});
+}
 
 function setStep(step) {
 	// * Hide nav buttons on last Step
@@ -174,6 +157,7 @@ function setStep(step) {
 	const stepProperties = formSteps[step];
 	stepTitle.innerText = stepProperties.title;
 	stepSubtitle.innerText = stepProperties.Subtitle;
+	console.log(stepProperties, "properties")
 	nextButton.value = stepProperties.afterComplete;
 
 	if (stepProperties.formToShow) {
@@ -186,6 +170,7 @@ function setStep(step) {
 
 function nextStep(e) {
 	e.preventDefault();
+	console.log(e.target)
 	if (Number(e.target.value) > formLength) return;
 	storeFormData(Number(e.target.value));
 	setStep(Number(e.target.value++));
@@ -212,7 +197,14 @@ function selectCoreSubscription(event) {
 }
 
 function storeFormData(step) {
+	console.log(step,  "This is step")
 	switch (step) {
+		case formSteps[1].step:
+			if(nameField.value || nameField.value || phoneField.value) {
+				console.error("Fill'em up")
+			}
+			console.log(user)
+			break;
 		case formSteps[2].step:
 			user.name = nameField.value;
 			user.email = emailField.value;
@@ -231,6 +223,11 @@ function storeFormData(step) {
 
 			break;
 		case formSteps[4].step:
+			console.log("Welcome to resume")
+
+			if(toggleSwitch.value === "yearly") {
+				document.querySelectorAll
+			}
 			// * set optional add ons
 			break;
 		case formSteps[5].step:
