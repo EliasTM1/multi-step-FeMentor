@@ -1,58 +1,33 @@
 import { addOnServices, availablePlans, user } from "./stepsDefinitions.js";
 
-let personalInfoForm,
-	frequencyformStep,
-	addOnFormStep,
-	finishStep,
-	thankYouStep,
-	currentStep,
-	stepTitle,
-	stepSubtitle,
-	nextButton,
-	backButton,
-	nameField,
-	emailField,
-	phoneField,
-	toggleSwitch,
-	coreSubs,
-	addOns,
-	addOnInput,
-	billingPeriod;
+let billingPeriod;
 
-// * Form steps
-personalInfoForm = document.querySelector(".personal-data");
-frequencyformStep = document.querySelector(".frequency-step");
-addOnFormStep = document.querySelector(".add-on-step");
-finishStep = document.querySelector(".finish-step");
-thankYouStep = document.querySelector(".thank-you");
+const formElements = {
+	personalInfoForm : document.querySelector(".personal-data"),
+	frequencyformStep : document.querySelector(".frequency-step"),
+	addOnFormStep : document.querySelector(".add-on-step"),
+	finishStep : document.querySelector(".finish-step"),
+	thankYouStep : document.querySelector(".thank-you"),
+	stepTitle : document.querySelector("#form-title"),
+	stepSubtitle : document.querySelector("#form-description"),
+	nextButton : document.querySelector("#next"),
+	backButton : document.querySelector("#back"),
+	nameField : document.querySelector("#usrName"),
+	emailField : document.querySelector("#usrMail"),
+	phoneField : document.querySelector("#usrPhone"),
+	toggleSwitch : document.querySelector("#toggle-switch"),
+	coreSubs : document.querySelectorAll(".package-container"),
+	addOns : document.querySelectorAll(".add-on")
+}
 
-// * Form Headers
-stepTitle = document.querySelector("#form-title");
-stepSubtitle = document.querySelector("#form-description");
-
-// * Form buttons
-nextButton = document.querySelector("#next");
-backButton = document.querySelector("#back");
-
-// * Personal form fields
-nameField = document.querySelector("#usrName");
-emailField = document.querySelector("#usrMail");
-phoneField = document.querySelector("#usrPhone");
-
-// * Frequency form fields
-toggleSwitch = document.querySelector("#toggle-switch");
-coreSubs = document.querySelectorAll(".package-container");
-
-// * Add ons
-addOns = document.querySelectorAll(".add-on");
 
 // * Event Listeners
-nextButton.addEventListener("click", (e) => nextStep(e));
-toggleSwitch.addEventListener("click", (e) => toggleSwitchState(e));
-coreSubs.forEach((div) => {
+formElements.nextButton.addEventListener("click", (e) => nextStep(e));
+formElements.toggleSwitch.addEventListener("click", (e) => toggleSwitchState(e));
+formElements.coreSubs.forEach((div) => {
 	div.addEventListener("click", (event) => selectCoreSubscription(event));
 });
-addOns.forEach((addOn) => {
+formElements.addOns.forEach((addOn) => {
 	addOn.addEventListener("click", (event) => includeAddOn(event));
 });
 
@@ -63,39 +38,39 @@ let formSteps = {
 		title: "Personal info",
 		Subtitle: "Please provide your name, email address, and phone number.",
 		buttonText: "Next Step",
-		formToShow: personalInfoForm,
+		formToShow: formElements.personalInfoForm,
 	},
 	2: {
 		step: 2,
 		title: "Select your plan",
 		Subtitle: "You have the option of monthly or yearly billing.",
 		buttonText: "Next Step",
-		formToShow: frequencyformStep,
-		formToHide: personalInfoForm,
+		formToShow: formElements.frequencyformStep,
+		formToHide: formElements.personalInfoForm,
 	},
 	3: {
 		step: 3,
 		title: "Pick add-ons",
 		Subtitle: "Add-ons help enhance your gaming experience.",
 		buttonText: "Next Step",
-		formToShow: addOnFormStep,
-		formToHide: frequencyformStep,
+		formToShow: formElements.addOnFormStep,
+		formToHide: formElements.frequencyformStep,
 	},
 	4: {
 		step: 4,
 		title: "Finishing up",
 		Subtitle: "Double-check everything looks OK before confirming.",
 		buttonText: "Confirm",
-		formToShow: finishStep,
-		formToHide: addOnFormStep,
+		formToShow: formElements.finishStep,
+		formToHide: formElements.addOnFormStep,
 	},
 	5: {
 		step: 5,
 		title: "",
-		Subtitle: "",
+		Subtitle: "", 
 		buttonText: "",
-		formToShow: thankYouStep,
-		formToHide: finishStep,
+		formToShow: formElements.thankYouStep,
+		formToHide: formElements.finishStep,
 	},
 };
 const formLength = Object.values(formSteps).length;
@@ -140,7 +115,7 @@ function toggleSwitchState(e) {
 	}
 
 	document.querySelectorAll("#service-cost").forEach((cost) => {
-		billingPeriod = toggleSwitch.value;
+		billingPeriod = formElements.toggleSwitch.value;
 		parentContainer = cost.closest(".package-container");
 		subscription = parentContainer.dataset.coresubs;
 		cost.textContent = availablePlans[subscription][billingPeriod];
@@ -150,15 +125,15 @@ function toggleSwitchState(e) {
 function setStep(step) {
 	// * Hide nav buttons on last Step
 	if (step === formLength) {
-		nextButton.style.display = "none";
-		backButton.style.display = "none";
+		formElements.nextButton.style.display = "none";
+		formElements.backButton.style.display = "none";
 	}
 
 	const stepProperties = formSteps[step];
-	stepTitle.innerText = stepProperties.title;
-	stepSubtitle.innerText = stepProperties.Subtitle;
+	formElements.stepTitle.innerText = stepProperties.title;
+	formElements.stepSubtitle.innerText = stepProperties.Subtitle;
 	console.log(stepProperties, "properties")
-	nextButton.value = stepProperties.afterComplete;
+	formElements.nextButton.value = stepProperties.afterComplete;
 
 	if (stepProperties.formToShow) {
 		stepProperties.formToShow.style.display = "flex";
@@ -183,7 +158,7 @@ function selectCoreSubscription(event) {
 		event.target.classList.contains("package-container") ||
 		event.target.matches("img, span")
 	) {
-		coreSubs.forEach((divContainer) => {
+		formElements.coreSubs.forEach((divContainer) => {
 			if (divContainer.classList.contains("package-container-active")) {
 				divContainer.classList.remove("package-container-active");
 			}
@@ -200,22 +175,22 @@ function storeFormData(step) {
 	console.log(step,  "This is step")
 	switch (step) {
 		case formSteps[1].step:
-			if(nameField.value || nameField.value || phoneField.value) {
+			if(formElements.nameField.value || formElements.nameField.value || formElements.phoneField.value) {
 				console.error("Fill'em up")
 			}
 			console.log(user)
 			break;
 		case formSteps[2].step:
-			user.name = nameField.value;
-			user.email = emailField.value;
-			user.phone = phoneField.value;
+			user.name = formElements.nameField.value;
+			user.email = formElements.emailField.value;
+			user.phone = formElements.phoneField.value;
 			break;
 
 		case formSteps[3].step:
 			
 			document.querySelectorAll("#addOnCost").forEach((addOnService, index) => {
 				let currentPlan = document.querySelectorAll(".addOnInput")
-				let subs = toggleSwitch.value
+				let subs = formElements.toggleSwitch.value
 				currentPlan = currentPlan[index].dataset.service
 				addOnService.textContent = addOnServices[currentPlan][subs];
 			});
@@ -225,7 +200,7 @@ function storeFormData(step) {
 		case formSteps[4].step:
 			console.log("Welcome to resume")
 
-			if(toggleSwitch.value === "yearly") {
+			if(formElements.toggleSwitch.value === "yearly") {
 				document.querySelectorAll
 			}
 			// * set optional add ons
