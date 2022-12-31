@@ -3,7 +3,7 @@ import { addOnServices, availablePlans, user } from "./stepsDefinitions.js";
 let billingPeriod;
 
 const formElements = {
-	personalInfoForm: document.querySelector(".personal-data"),
+	personalInformationForm: document.querySelector(".personal-data"),
 	frequencyformStep: document.querySelector(".frequency-step"),
 	addOnFormStep: document.querySelector(".add-on-step"),
 	finishStep: document.querySelector(".finish-step"),
@@ -32,7 +32,7 @@ let formSteps = {
 		title: "Personal info",
 		Subtitle: "Please provide your name, email address, and phone number.",
 		buttonText: "Next Step",
-		formToShow: formElements.personalInfoForm,
+		formToShow: formElements.personalInformationForm,
 	},
 	2: {
 		step: 2,
@@ -40,7 +40,7 @@ let formSteps = {
 		Subtitle: "You have the option of monthly or yearly billing.",
 		buttonText: "Next Step",
 		formToShow: formElements.frequencyformStep,
-		formToHide: formElements.personalInfoForm,
+		formToHide: formElements.personalInformationForm,
 	},
 	3: {
 		step: 3,
@@ -102,11 +102,11 @@ class MultiStepForm {
 			formElements.nextButton.style.display = "none";
 			formElements.backButton.style.display = "none";
 		}
-
 		const stepProperties = formSteps[step];
 		formElements.stepTitle.innerText = stepProperties.title;
 		formElements.stepSubtitle.innerText = stepProperties.Subtitle;
-		formElements.nextButton.value = stepProperties.afterComplete;
+		formElements.nextButton.value = step;
+		formElements.nextButton.value = step++;
 
 		if (stepProperties.formToShow) {
 			stepProperties.formToShow.style.display = "flex";
@@ -118,7 +118,6 @@ class MultiStepForm {
 
 	nextStep(e) {
 		e.preventDefault();
-		console.log(e.target);
 		if (Number(e.target.value) > formLength) return;
 		this.storeFormData(Number(e.target.value));
 		this.setStep(Number(e.target.value++));
@@ -191,9 +190,9 @@ class MultiStepForm {
 		switch (step) {
 			case formSteps[1].step:
 				if (
-					formElements.nameField.value ||
-					formElements.nameField.value ||
-					formElements.phoneField.value
+					formElements.nameField.value === "" ||
+					formElements.nameField.value === "" ||
+					formElements.phoneField.value === ""
 				) {
 					console.error("Fill'em up");
 				}
