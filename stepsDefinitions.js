@@ -5,28 +5,28 @@ export const addOnServices = {
 	},
 	largerStorage: {
 		monthly: "$2/mo",
-		yearly: "$20/mo",
+		yearly: "$20/yr",
 	},
 	customProfile: {
 		monthly: "$2/mo",
-		yearly: "$20/mo",
+		yearly: "$20/yr",
 	},
 };
 
 export const availablePlans = {
 	arcade: {
 		monthly: "$9/mo",
-		yearly: "$90/mo",
+		yearly: "$90/yr",
 		freeMonths: "2 months free",
 	},
 	advanced: {
 		monthly: "$12/mo",
-		yearly: "$120/mo",
+		yearly: "$120/yr",
 		freeMonths: "2 months free",
 	},
 	pro: {
 		monthly: "$15/mo",
-		yearly: "$150/mo",
+		yearly: "$150/yr",
 		freeMonths: "2 months free",
 	},
 };
@@ -37,8 +37,7 @@ export let user = {
 	phone: "",
 	currentStep: 0,
 	baseSubscription: "",
-	yearlySubscrition: false,
-	monthlySubscrition: false,
+	billingFrequency : "",
 	addOnServices: {
 		onlineService: false,
 		largerStorage: false,

@@ -92,6 +92,11 @@ section {
 	margin-right: 1rem;
 }
 
+.step-number-active {
+    background-color: #BEE2FD; 
+    color: #022959;
+}
+
 .step-container {
 	display: flex;
 	flex-direction: column;
@@ -160,6 +165,26 @@ form input {
 	padding: 0.2rem 0.5rem;
 }
 
+textarea:focus, input:focus{
+    outline: none;
+}
+
+.invalid-form-field {
+    border: 0.5px red solid;
+    background-color: rgb(255, 0, 0, 0.03);
+}
+
+.valid-form-field {
+    border: 0.5px #008200 solid;
+    background-color: rgb(0, 180, 0, 0.09);
+}
+.valid-form-field::after {
+    content: "Hola";
+    position: absolute;
+    width: 50px;
+    height: 50px;
+}
+
 form button {
 	background-color: #022959;
     font-family: "UbuntuMedium";
@@ -175,8 +200,11 @@ form button {
 	right: 0;
     font-size: 1rem;
     cursor: pointer;
-}
+} 
 
+.disabled {
+    background-color: rgb(2, 41, 89, 0.5);
+}
 /* * Finish Step 1 */
 
 .frequency-container {
