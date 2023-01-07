@@ -18,11 +18,15 @@ const formElements = {
 	toggleSwitch: document.querySelector("#toggle-switch"),
 	coreSubs: document.querySelectorAll(".package-container"),
 	addOns: document.querySelectorAll(".add-on"),
+	addOnCost: document.querySelectorAll("#addOnCost"),
 };
 
 // * Event Listeners
 formElements.nextButton.addEventListener("click", () => form.nextStep());
 formElements.backButton.addEventListener("click", (e) => form.goback(e));
+formElements.nameField.addEventListener("input", (e) => form.validateName(e));
+formElements.emailField.addEventListener("input", (e) => form.validateEmail(e));
+formElements.phoneField.addEventListener("input", (e) => form.validatePhone(e));
 formElements.toggleSwitch.addEventListener("click", (e) =>
 	form.toggleSwitchState(e)
 );
@@ -32,9 +36,6 @@ formElements.coreSubs.forEach((div) => {
 formElements.addOns.forEach((addOn) => {
 	addOn.addEventListener("click", (event) => form.includeAddOn(event));
 });
-formElements.nameField.addEventListener("input", (e) => form.validateName(e));
-formElements.emailField.addEventListener("input", (e) => form.validateEmail(e));
-formElements.phoneField.addEventListener("input", (e) => form.validatePhone(e));
 
 let formSteps = {
 	1: {
@@ -185,7 +186,7 @@ class MultiStepForm {
 		formElements.nextButton.classList.remove("disabled");
 		formElements.phoneField.classList.add("valid-form-field");
 		formElements.phoneField.classList.remove("invalid-form-field");
-		return
+		return;
 	}
 
 	selectCoreSubscription(event) {
@@ -214,14 +215,11 @@ class MultiStepForm {
 		e.target.value === "monthly"
 			? (e.target.value = "yearly")
 			: (e.target.value = "monthly");
+		e.target.value === "monthly"
+			? (user.billingFrequency = "monthly")
+			: (user.billingFrequency = "yearly");
 
-		if (e.target.value === "monthly") {
-			user.billingFrequency = "monthly";
-		}
-		if (e.target.value === "yearly") {
-			user.billingFrequency = "yearly";
-		}
-
+		console.log(user.billingFrequency, "user freq");
 		document.querySelectorAll("#service-cost").forEach((cost) => {
 			billingPeriod = formElements.toggleSwitch.value;
 			parentContainer = cost.closest(".package-container");
@@ -231,21 +229,29 @@ class MultiStepForm {
 	}
 
 	includeAddOn(addOnService) {
-		const clickedContainer = addOnService.target.closest(".add-on");
-		const textBox = clickedContainer.querySelector("input");
-
-		if (addOnService.target.matches("input")) {
-			textBox.checked = !textBox.checked;
+		let clickedContainer, textBox, price, serviceTitle, currentService;
+		clickedContainer = addOnService.target.closest(".add-on");
+		serviceTitle = clickedContainer.querySelector(".addon-description span").innerText;
+		price = clickedContainer.querySelector("#addOnCost span").innerText;
+		textBox = clickedContainer.querySelector("input");
+		currentService = { price, serviceTitle }
+		// * Styles
+		clickedContainer.classList.toggle("package-container-active");
+		textBox.checked = !textBox.checked;
+		console.log(textBox.checked, "isChecked")
+		
+		if (textBox.checked) {
+			user.addOnServices.push(currentService)
+			return
 		}
 
-		if (
-			clickedContainer.classList.contains("add-on") ||
-			addOnService.target.matches("div, span") ||
-			addOnService.target.matches("input")
-		) {
-			clickedContainer.classList.toggle("package-container-active");
-			textBox.checked = !textBox.checked;
-		}
+		console.warn(currentService.serviceTitle, "warnes")
+		user.addOnServices = user.addOnServices.filter((service) => service.serviceName !== currentService.serviceTitle);
+
+		console.log(user.addOnServices, "Finish")
+		
+		console.log("Out");
+		
 	}
 
 	activeFormStep() {

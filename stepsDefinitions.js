@@ -1,15 +1,18 @@
 export const addOnServices = {
 	onlineService: {
-		monthly: "$1/mo",
-		yearly: "$10/yr",
+		serviceName: "Online Service",
+		monthly: 1,
+		yearly: 10
 	},
 	largerStorage: {
-		monthly: "$2/mo",
-		yearly: "$20/yr",
+		serviceName: "Larger storage",
+		monthly: 2,
+		yearly: 20,
 	},
 	customProfile: {
-		monthly: "$2/mo",
-		yearly: "$20/yr",
+		serviceName: "Customizable profile",
+		monthly: 2,
+		yearly: 20,
 	},
 };
 
@@ -38,10 +41,6 @@ export let user = {
 	currentStep: 0,
 	baseSubscription: "",
 	billingFrequency : "",
-	addOnServices: {
-		onlineService: false,
-		largerStorage: false,
-		customProfile: false,
-	},
+	addOnServices: [],
 };
 
