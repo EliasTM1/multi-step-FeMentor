@@ -100,6 +100,7 @@ class MultiStepForm {
 
 	currentView = formSteps[this.currentStep];
 	isFormValid = false;
+	
 	handleSubmit(event) {
 		event.preventDefault();
 	}
@@ -229,28 +230,36 @@ class MultiStepForm {
 	}
 
 	includeAddOn(addOnService) {
-		let clickedContainer, textBox, price, serviceTitle, currentService;
-		clickedContainer = addOnService.target.closest(".add-on");
-		serviceTitle = clickedContainer.querySelector(".addon-description span").innerText;
-		price = clickedContainer.querySelector("#addOnCost span").innerText;
-		textBox = clickedContainer.querySelector("input");
-		currentService = { price, serviceTitle }
-		// * Styles
-		clickedContainer.classList.toggle("package-container-active");
-		textBox.checked = !textBox.checked;
-		console.log(textBox.checked, "isChecked")
-		
-		if (textBox.checked) {
-			user.addOnServices.push(currentService)
-			return
+		let clickedContainer = {
+			clickedContainer: addOnService.target.closest(".add-on"),
+			get price() {
+				return this.clickedContainer.querySelector("#addOnCost span").innerText;
+			},
+			get checkBox() {
+				return this.clickedContainer.querySelector("input");
+			},
+			get serviceTitle() {
+				return this.clickedContainer.querySelector(".addon-description span").innerText;
+			},
+			get toggle() {
+				return this.clickedContainer.classList.toggle( "package-container-active" );
+			},
+			get service() {
+				return { price : this.price  , service: this.serviceTitle};
+			},
+		};
+
+		clickedContainer.toggle;
+		clickedContainer.checkBox.checked = !clickedContainer.checkBox.checked;
+
+		if (clickedContainer.checkBox.checked) {
+			user.addOnServices.push(clickedContainer.service);
+			console.log(user.addOnServices, "user.addOnServices")
+			return;
 		}
 
-		console.warn(currentService.serviceTitle, "warnes")
-		user.addOnServices = user.addOnServices.filter((service) => service.serviceName !== currentService.serviceTitle);
-
-		console.log(user.addOnServices, "Finish")
-		
-		console.log("Out");
+		user.addOnServices.filter((service) => service.serviceName !== clickedContainer.serviceTitle)
+		console.log(user.addOnServices , "Cleaned")
 		
 	}
 
