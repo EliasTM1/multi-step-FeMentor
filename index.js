@@ -19,6 +19,17 @@ const formElements = {
 	coreSubs: document.querySelectorAll(".package-container"),
 	addOns: document.querySelectorAll(".add-on"),
 	addOnCost: document.querySelectorAll("#addOnCost"),
+	serviceCosts: document.querySelectorAll("#service-cost"), 
+	resume :{
+		coreSubscription: document.getElementById("resume-core"),
+		changeBasket: document.getElementById("resume-back"),
+		corePrice: document.getElementById("core-price"),
+		addOname: document.getElementById("resume-addon"),
+		addOnPrice: document.getElementById("resume-addOn-price"),
+		billingFrequency: document.getElementById("resume-frequency"),
+		total: document.getElementById("total"),
+	}
+
 };
 
 // * Event Listeners
@@ -27,16 +38,10 @@ formElements.backButton.addEventListener("click", (e) => form.goback(e));
 formElements.nameField.addEventListener("input", (e) => form.validateName(e));
 formElements.emailField.addEventListener("input", (e) => form.validateEmail(e));
 formElements.phoneField.addEventListener("input", (e) => form.validatePhone(e));
-formElements.toggleSwitch.addEventListener("click", (e) =>
-	form.toggleSwitchState(e)
-);
-formElements.coreSubs.forEach((div) => {
-	div.addEventListener("click", (event) => form.selectCoreSubscription(event));
-});
-formElements.addOns.forEach((addOn) => {
-	addOn.addEventListener("click", (event) => form.includeAddOn(event));
-});
-
+formElements.toggleSwitch.addEventListener("click", (e) => form.toggleSwitchState(e));
+formElements.coreSubs.forEach((div) => { div.addEventListener("click", (event) => form.selectCoreSubscription(event));});
+formElements.addOns.forEach((addOn) => {addOn.addEventListener("click", (event) => form.includeAddOn(event));});
+formElements.resume.changeBasket.addEventListener('click', () => form.changeShoppingCart())
 let formSteps = {
 	1: {
 		step: 1,
@@ -84,11 +89,6 @@ let formSteps = {
 };
 
 // !Start class implementation
-// !Start class implementation
-// !Start class implementation
-// !Start class implementation
-// !Start class implementation
-
 class MultiStepForm {
 	constructor(formId, formDefinitions) {
 		this.form = document.getElementById(formId);
@@ -107,6 +107,9 @@ class MultiStepForm {
 
 	checkForProgress() {
 		this.setStep(this.currentStep);
+		// TODO : Change the defailt billing period in case the user has no previous progress
+		user.billingFrequency = "monthly"
+		user.baseSubscription = "arcade"
 	}
 
 	goback() {
@@ -117,11 +120,49 @@ class MultiStepForm {
 	}
 
 	nextStep() {
-		if (!this.isFormValid) return;
+		if (!this.isFormValid || !this.validateSteps()) return;
 		this.currentStep++;
 		user.currentStep = this.currentStep;
 		this.removeCurrentView();
 		this.setStep();
+	}
+
+
+	validateSteps() {
+		console.log("This is my current", this.currentStep)
+		return true 
+	}
+
+	setInvalidForm(){
+		this.isFormValid = false;
+		formElements.nextButton.disabled = true;
+		formElements.nextButton.classList.add("disabled");
+	}
+
+	setValidForm(){
+		this.isFormValid = true;
+		formElements.nextButton.disabled = false;
+		formElements.nextButton.classList.remove("disabled");
+	}
+
+	changeShoppingCart() {
+		this.currentStep = 2;
+		this.removeCurrentView()
+		this.setStep()
+
+	}
+
+
+	updateBill() {
+		let coreSubs = this.capitalizer(user.baseSubscription);
+		let coreFreq = this.capitalizer(user.billingFrequency);
+		formElements.resume.coreSubscription.innerText = `${coreSubs} (${coreFreq})`;
+		formElements.resume.corePrice.innerText = availablePlans[user.baseSubscription][user.billingFrequency]
+		
+	}
+
+	capitalizer (lowerString) {
+		return lowerString.charAt(0).toUpperCase() + lowerString.slice(1);
 	}
 
 	validateName(event) {
@@ -129,19 +170,15 @@ class MultiStepForm {
 		let nameLength = event.target.value.length;
 		if (name === "" || nameLength <= 2) {
 			user.name = "";
-			this.isFormValid = false;
-			formElements.nextButton.disabled = true;
-			formElements.nextButton.classList.add("disabled");
 			formElements.nameField.classList.add("invalid-form-field");
 			formElements.nameField.classList.remove("valid-form-field");
+			this.setInvalidForm()
 			return;
 		}
 		user.name = name;
-		this.isFormValid = true;
-		formElements.nextButton.disabled = false;
-		formElements.nextButton.classList.remove("disabled");
 		formElements.nameField.classList.add("valid-form-field");
 		formElements.nameField.classList.remove("invalid-form-field");
+		this.setValidForm()
 		return;
 	}
 
@@ -152,63 +189,58 @@ class MultiStepForm {
 
 		if (!regex.test(email)) {
 			user.email = "";
-			this.isFormValid = false;
-			formElements.nextButton.disabled = true;
-			formElements.nextButton.classList.add("disabled");
 			formElements.emailField.classList.add("invalid-form-field");
 			formElements.emailField.classList.remove("valid-form-field");
+			this.setInvalidForm()
 			return;
 		}
 
 		user.email = email;
-		this.isFormValid = true;
-		formElements.nextButton.disabled = false;
-		formElements.nextButton.classList.remove("disabled");
 		formElements.emailField.classList.add("valid-form-field");
 		formElements.emailField.classList.remove("invalid-form-field");
+		this.setValidForm()
 		return;
 	}
 
 	validatePhone(event) {
 		const phoneField = event.target.value;
-		const regex = /^\(?[\d\s]{4}\)?[\d\s]{3}[\d\s]{4}$/;
+		const regex = /^\(?[\d\s]{4}\)?[\d\s]{4}[\d\s]{3}$/;
 		if (!regex.test(phoneField)) {
 			user.phone = "";
-			this.isFormValid = false;
-			formElements.nextButton.disabled = true;
-			formElements.nextButton.classList.add("disabled");
 			formElements.phoneField.classList.add("invalid-form-field");
 			formElements.phoneField.classList.remove("valid-form-field");
+			this.setInvalidForm()
 			return;
 		}
 		user.phone = phoneField;
-		this.isFormValid = true;
-		formElements.nextButton.disabled = false;
-		formElements.nextButton.classList.remove("disabled");
 		formElements.phoneField.classList.add("valid-form-field");
 		formElements.phoneField.classList.remove("invalid-form-field");
+		this.setValidForm()
 		return;
 	}
 
+
+
 	selectCoreSubscription(event) {
-		let clickedContainer, coreSubscription, active;
+		let clickedContainer, coreSubscription, active, subscription = event.target
 
 		if (
-			event.target.classList.contains("package-container") ||
-			event.target.matches("img, span")
+			subscription.classList.contains("package-container") ||
+			subscription.matches("img, span")
 		) {
 			formElements.coreSubs.forEach((divContainer) => {
 				if (divContainer.classList.contains("package-container-active")) {
 					divContainer.classList.remove("package-container-active");
 				}
 			});
-			clickedContainer = event.target.closest(".package-container");
+			clickedContainer = subscription.closest(".package-container");
 			coreSubscription = clickedContainer.dataset.coresubs;
 			active = clickedContainer.dataset.active;
 			user.baseSubscription = coreSubscription;
 			if (!clickedContainer.classList.contains("package-container-active"))
 				clickedContainer.classList.add("package-container-active");
 		}
+		this.setValidForm()
 	}
 
 	toggleSwitchState(e) {
@@ -220,8 +252,7 @@ class MultiStepForm {
 			? (user.billingFrequency = "monthly")
 			: (user.billingFrequency = "yearly");
 
-		console.log(user.billingFrequency, "user freq");
-		document.querySelectorAll("#service-cost").forEach((cost) => {
+		formElements.serviceCosts.forEach((cost) => {
 			billingPeriod = formElements.toggleSwitch.value;
 			parentContainer = cost.closest(".package-container");
 			subscription = parentContainer.dataset.coresubs;
@@ -230,39 +261,32 @@ class MultiStepForm {
 	}
 
 	includeAddOn(addOnService) {
-		let clickedContainer = {
-			clickedContainer: addOnService.target.closest(".add-on"),
-			get price() {
-				return this.clickedContainer.querySelector("#addOnCost span").innerText;
-			},
-			get checkBox() {
-				return this.clickedContainer.querySelector("input");
-			},
-			get serviceTitle() {
-				return this.clickedContainer.querySelector(".addon-description span").innerText;
-			},
-			get toggle() {
-				return this.clickedContainer.classList.toggle( "package-container-active" );
-			},
+		let addOn = addOnService.target.closest(".add-on");
+		let serviceContainer = {
+			price : addOn.querySelector("#addOnCost span").innerText,
+			checkBox: addOn.querySelector("input"),
+			serviceTitle: addOn.querySelector(".addon-description span").innerText,
+			toggle: addOn.classList.toggle( "package-container-active" ),
 			get service() {
-				return { price : this.price  , service: this.serviceTitle};
+				return { price : this.price  , service: this.serviceTitle };
 			},
 		};
 
-		clickedContainer.toggle;
-		clickedContainer.checkBox.checked = !clickedContainer.checkBox.checked;
+		serviceContainer.toggle;
+		serviceContainer.checkBox.checked = !serviceContainer.checkBox.checked;
 
-		if (clickedContainer.checkBox.checked) {
-			user.addOnServices.push(clickedContainer.service);
+		if (serviceContainer.checkBox.checked) {
+			user.addOnServices.push(serviceContainer.service);
 			console.log(user.addOnServices, "user.addOnServices")
+			this.setValidForm()
 			return;
 		}
 
-		user.addOnServices.filter((service) => service.serviceName !== clickedContainer.serviceTitle)
-		console.log(user.addOnServices , "Cleaned")
-		
+		user.addOnServices = user.addOnServices.filter((service) => service.service !== serviceContainer.serviceTitle);
+		if (user.addOnServices.length === 0) this.setInvalidForm()
 	}
 
+	// * Circles with numbers on the left side
 	activeFormStep() {
 		let steps = document.querySelectorAll(".step-number");
 		this.currentStep === this.formStepsLength
@@ -271,19 +295,15 @@ class MultiStepForm {
 	}
 
 	removeCurrentView() {
-		const currentView = document.querySelector(
-			'.form-wrapper > *[style*="display: flex"]'
-		);
+		const currentView = document.querySelector('.form-wrapper > *[style*="display: flex"]');
 		const currentStep = document.querySelector(".step-number-active");
-		if (currentStep) {
-			currentStep.classList.remove("step-number-active");
-		}
+		if (currentStep) currentStep.classList.remove("step-number-active");
 		currentView.style.display = "none";
 	}
 
 	setStep() {
 		this.activeFormStep();
-
+		// * Back button display management
 		if (this.currentStep === 1) {
 			formElements.backButton.style.display = "none";
 			formElements.nextButton.style.display = "block";
@@ -301,17 +321,17 @@ class MultiStepForm {
 		formElements.stepTitle.innerText = currentFormConfig.title;
 		formElements.stepSubtitle.innerText = currentFormConfig.Subtitle;
 		currentFormConfig.formToShow.style.display = "flex";
-
+		
 		// * Show/hide corresponding step
 		if (currentFormConfig.formToHide) {
 			currentFormConfig.formToHide.style.display = "none";
 		}
+		
+		if (currentFormConfig.title === "Select your plan" ) this.setInvalidForm()
+		
+		// this.updateBill();
 	}
 }
-// ! Finish class implementation
-// ! Finish class implementation
-// ! Finish class implementation
-// ! Finish class implementation
 // ! Finish class implementation
 
 let form = new MultiStepForm("multiStepForm", formSteps);
