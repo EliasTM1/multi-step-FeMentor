@@ -114,28 +114,29 @@
 							<!-- * frequency section -->
 							<div class="add-on-step">
 								<div class="add-on">
-									<input type="checkbox" data-service="onlineService" class="addOnInput" />
+									<input type="checkbox" class="addOnInput" />
 									<div class="addon-description">
 										<span>Online Service</span>
 										<span>Access to multiplayer games</span>
 									</div>
-									<span id="addOnCost">+$<span>1</span>/mo</span>
+									<span id="addOnCost" data-addon="onlineService">+$1/mo</span>
 								</div>
 								<div class="add-on">
-									<input type="checkbox" data-service="largerStorage" class="addOnInput" />
+									<input type="checkbox" class="addOnInput" />
 									<div class="addon-description">
 										<span>Larger storage</span>
 										<span>Extra 1TB of cloud save</span>
 									</div>
-									<span id="addOnCost">+$<span>2</span>/mo</span>
+									<span id="addOnCost" data-addon="largerStorage">+$2/mo</span>
 								</div>
 								<div class="add-on">
-									<input type="checkbox" data-service="customProfile" class="addOnInput" />
+									<input type="checkbox" class="addOnInput" />
 									<div class="addon-description">
 										<span>Customizable profile</span>
 										<span>Custom theme on your profile</span>
 									</div>
-									<span id="addOnCost">+$<span>2</span>/mo</span>
+									<!-- TODO: Remove after fix -->
+									<span id="addOnCost" data-addon="customProfile">+$10/mo</span>
 								</div>
 							</div>
 							<!-- * Frequency section finish -->
@@ -147,11 +148,9 @@
 											<span id="resume-core"> Arcade (Monthly) </span>
 											<span id="resume-back"> Change </span>
 										</div>
-										<div id="monthlyTotal">$9/mo</div>
+										<div id="core-price">$9/mo</div>
 									</div>
 									<div id="addOnServices">
-										<div id="resume-subervice">Online service<span id="resume-subService">+$9/mo</span></div>
-										<div>Online service<span>+$9/mo</span></div>
 									</div>
 								</div>
 								<div class="total-container">

@@ -16,6 +16,7 @@ const formElements = {
 	emailField: document.querySelector("#emailField"),
 	phoneField: document.querySelector("#phoneField"),
 	toggleSwitch: document.querySelector("#toggle-switch"),
+	checkBox: document.querySelectorAll(".addOnInput"),
 	coreSubs: document.querySelectorAll(".package-container"),
 	addOns: document.querySelectorAll(".add-on"),
 	addOnCost: document.querySelectorAll("#addOnCost"),
@@ -27,7 +28,9 @@ const formElements = {
 		addOname: document.getElementById("resume-addon"),
 		addOnPrice: document.getElementById("resume-addOn-price"),
 		billingFrequency: document.getElementById("resume-frequency"),
-		total: document.getElementById("total"),
+		addOnsList: document.getElementById("addOnServices"),
+		totalFrequency: document.querySelector(".total-container span"),
+		totalPayment: document.getElementById("total"),
 	}
 
 };
@@ -41,6 +44,7 @@ formElements.phoneField.addEventListener("input", (e) => form.validatePhone(e));
 formElements.toggleSwitch.addEventListener("click", (e) => form.toggleSwitchState(e));
 formElements.coreSubs.forEach((div) => { div.addEventListener("click", (event) => form.selectCoreSubscription(event));});
 formElements.addOns.forEach((addOn) => {addOn.addEventListener("click", (event) => form.includeAddOn(event));});
+
 formElements.resume.changeBasket.addEventListener('click', () => form.changeShoppingCart())
 let formSteps = {
 	1: {
@@ -107,9 +111,6 @@ class MultiStepForm {
 
 	checkForProgress() {
 		this.setStep(this.currentStep);
-		// TODO : Change the defailt billing period in case the user has no previous progress
-		user.billingFrequency = "monthly"
-		user.baseSubscription = "arcade"
 	}
 
 	goback() {
@@ -120,7 +121,7 @@ class MultiStepForm {
 	}
 
 	nextStep() {
-		if (!this.isFormValid || !this.validateSteps()) return;
+		if (!this.isFormValid) return;
 		this.currentStep++;
 		user.currentStep = this.currentStep;
 		this.removeCurrentView();
@@ -128,10 +129,6 @@ class MultiStepForm {
 	}
 
 
-	validateSteps() {
-		console.log("This is my current", this.currentStep)
-		return true 
-	}
 
 	setInvalidForm(){
 		this.isFormValid = false;
@@ -149,16 +146,6 @@ class MultiStepForm {
 		this.currentStep = 2;
 		this.removeCurrentView()
 		this.setStep()
-
-	}
-
-
-	updateBill() {
-		let coreSubs = this.capitalizer(user.baseSubscription);
-		let coreFreq = this.capitalizer(user.billingFrequency);
-		formElements.resume.coreSubscription.innerText = `${coreSubs} (${coreFreq})`;
-		formElements.resume.corePrice.innerText = availablePlans[user.baseSubscription][user.billingFrequency]
-		
 	}
 
 	capitalizer (lowerString) {
@@ -166,6 +153,7 @@ class MultiStepForm {
 	}
 
 	validateName(event) {
+		if(!event) return false;
 		let name = event.target.value;
 		let nameLength = event.target.value.length;
 		if (name === "" || nameLength <= 2) {
@@ -179,10 +167,11 @@ class MultiStepForm {
 		formElements.nameField.classList.add("valid-form-field");
 		formElements.nameField.classList.remove("invalid-form-field");
 		this.setValidForm()
-		return;
+		return true;
 	}
 
 	validateEmail(event) {
+		if(!event) return false;
 		let email = event.target.value;
 		const regex =
 			/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
@@ -199,10 +188,11 @@ class MultiStepForm {
 		formElements.emailField.classList.add("valid-form-field");
 		formElements.emailField.classList.remove("invalid-form-field");
 		this.setValidForm()
-		return;
+		return true;
 	}
 
 	validatePhone(event) {
+		if(!event) return false;
 		const phoneField = event.target.value;
 		const regex = /^\(?[\d\s]{4}\)?[\d\s]{4}[\d\s]{3}$/;
 		if (!regex.test(phoneField)) {
@@ -216,7 +206,7 @@ class MultiStepForm {
 		formElements.phoneField.classList.add("valid-form-field");
 		formElements.phoneField.classList.remove("invalid-form-field");
 		this.setValidForm()
-		return;
+		return true;
 	}
 
 
@@ -245,45 +235,53 @@ class MultiStepForm {
 
 	toggleSwitchState(e) {
 		let parentContainer, subscription;
-		e.target.value === "monthly"
-			? (e.target.value = "yearly")
-			: (e.target.value = "monthly");
-		e.target.value === "monthly"
-			? (user.billingFrequency = "monthly")
-			: (user.billingFrequency = "yearly");
-
+		e.target.value === "monthly" ? e.target.value = "yearly" : e.target.value = "monthly";
+		e.target.value === "monthly" ? user.billingFrequency = "monthly" : user.billingFrequency = "yearly";
+		
 		formElements.serviceCosts.forEach((cost) => {
 			billingPeriod = formElements.toggleSwitch.value;
 			parentContainer = cost.closest(".package-container");
 			subscription = parentContainer.dataset.coresubs;
 			cost.textContent = availablePlans[subscription][billingPeriod];
 		});
+
+		formElements.addOnCost.forEach((cost, index) => {
+			let billingPeriod = formElements.toggleSwitch.value;
+			let service = cost.dataset.addon;
+			console.log(addOnServices[service][billingPeriod], "result")
+			cost.textContent = addOnServices[service][billingPeriod]
+			console.log(cost, "cost", index)
+		});
+
+		this.setCheckout()
 	}
 
 	includeAddOn(addOnService) {
 		let addOn = addOnService.target.closest(".add-on");
 		let serviceContainer = {
-			price : addOn.querySelector("#addOnCost span").innerText,
+			price : addOn.querySelector("#addOnCost").innerText,
 			checkBox: addOn.querySelector("input"),
 			serviceTitle: addOn.querySelector(".addon-description span").innerText,
-			toggle: addOn.classList.toggle( "package-container-active" ),
 			get service() {
 				return { price : this.price  , service: this.serviceTitle };
 			},
 		};
 
-		serviceContainer.toggle;
-		serviceContainer.checkBox.checked = !serviceContainer.checkBox.checked;
-
-		if (serviceContainer.checkBox.checked) {
+		if (!addOn.classList.contains("package-container-active")) {
+			addOn.classList.add("package-container-active")
 			user.addOnServices.push(serviceContainer.service);
-			console.log(user.addOnServices, "user.addOnServices")
-			this.setValidForm()
-			return;
+			serviceContainer.checkBox.checked = true
+			return
+		} 
+		
+		console.log(addOnService, "ADDONSERVICE")
+		serviceContainer.checkBox.checked = false
+		if(serviceContainer.checkBox.checked || addOn.classList.contains("package-container-active")) {
+			user.addOnServices = user.addOnServices.filter((service) => service.service !== serviceContainer.serviceTitle);
+			addOn.classList.remove("package-container-active")
+			return 
 		}
-
-		user.addOnServices = user.addOnServices.filter((service) => service.service !== serviceContainer.serviceTitle);
-		if (user.addOnServices.length === 0) this.setInvalidForm()
+		
 	}
 
 	// * Circles with numbers on the left side
@@ -326,11 +324,59 @@ class MultiStepForm {
 		if (currentFormConfig.formToHide) {
 			currentFormConfig.formToHide.style.display = "none";
 		}
-		
-		if (currentFormConfig.title === "Select your plan" ) this.setInvalidForm()
-		
-		// this.updateBill();
+		if (currentFormConfig.title === "Personal info" ) {
+			this.setInvalidForm();
+		}
+		if (currentFormConfig.title === "Select your plan" ) {
+			user.addOnServices = []
+			formElements.addOns.forEach(service => service.classList.remove("package-container-active"));
+			formElements.checkBox.forEach(box => box.checked = false)
+			this.setInvalidForm()
+		}
+
+		if (currentFormConfig.title === "Finishing up" ) this.setCheckout()
 	}
+
+	setCheckout() {
+		console.log("currentUSer", user)
+		let extraServices = "";
+		let coreSubs = this.capitalizer(user.baseSubscription);
+		let coreFreq = this.capitalizer(user.billingFrequency);
+		formElements.resume.coreSubscription.innerText = `${coreSubs} (${coreFreq})`;
+		formElements.resume.corePrice.innerText = availablePlans[coreSubs.toLowerCase()][coreFreq.toLowerCase()]
+
+		if (user.addOnServices.length >= 0) {
+			user.addOnServices.forEach((addOn) => {
+				extraServices += `<div>${addOn.service}<span>${addOn.price}</span></div><br>`
+			})
+		}
+		formElements.resume.addOnsList.innerHTML = extraServices;	
+		formElements.resume.totalFrequency.innerText = `Total (${user.billingFrequency})`
+		formElements.resume.totalPayment.innerHTML = this.getTotal()
+	}
+
+	getTotal() {
+		let total = [];
+		let totalFreq = user.billingFrequency === "montlhy" ? "mo" : "yr"
+		const {baseSubscription, billingFrequency} = user
+		user.addOnServices.forEach(service => {
+			console.log(service)
+			total.push(this.sanitizer(service.price))
+		})
+		
+		total.push(this.sanitizer(availablePlans[baseSubscription][billingFrequency]))
+		total = total.reduce((accumulator, currentItem) => accumulator + currentItem)
+		return `$${total}/${totalFreq}`
+		
+	}
+
+	sanitizer(userCost) {
+		let temporal = parseFloat(userCost.replace(/[^0-9]/g, ''))
+		console.log(userCost, "usrCost")
+		console.log(temporal, "TEMP")
+		return temporal;
+	}
+
 }
 // ! Finish class implementation
 

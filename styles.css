@@ -406,7 +406,7 @@ form button {
 	padding: 1.5rem 1.5rem 0rem 1.5rem;
     font-family:  "UbuntuMedium";
     width: 26.063rem;
-    height: 182px;
+    /* height: 182px; */
     justify-content: space-around;
 }
 
@@ -434,7 +434,7 @@ form button {
 }
 
 #addOnServices {
-    /* overflow: scroll; */
+    padding-top: 1rem;
 }
 
 #addOnServices > div {
@@ -443,7 +443,7 @@ form button {
     color: rgb(150, 153, 170, .9);
     flex-direction: row !important;
     justify-content: space-between;
-    margin-bottom: 1.2rem;
+    /* margin-bottom: 1.2rem; */
     flex-direction: column;
 }
 
