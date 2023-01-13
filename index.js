@@ -249,9 +249,9 @@ class MultiStepForm {
 		formElements.addOnCost.forEach((cost, index) => {
 			let billingPeriod = formElements.toggleSwitch.value;
 			let service = cost.dataset.addon;
-			console.log(addOnServices[service][billingPeriod], "result")
+
 			cost.textContent = addOnServices[service][billingPeriod]
-			console.log(cost, "cost", index)
+
 		});
 
 		this.setCheckout()
@@ -275,7 +275,6 @@ class MultiStepForm {
 			return
 		} 
 		
-		console.log(addOnService, "ADDONSERVICE")
 		serviceContainer.checkBox.checked = false
 		if(serviceContainer.checkBox.checked || addOn.classList.contains("package-container-active")) {
 			user.addOnServices = user.addOnServices.filter((service) => service.service !== serviceContainer.serviceTitle);
@@ -346,7 +345,6 @@ class MultiStepForm {
 	}
 
 	setCheckout() {
-		console.log("currentUSer", user)
 		let extraServices = "";
 		let coreSubs = this.capitalizer(user.baseSubscription);
 		let coreFreq = this.capitalizer(user.billingFrequency);
@@ -368,7 +366,7 @@ class MultiStepForm {
 		let totalFreq = user.billingFrequency === "montlhy" ? "mo" : "yr"
 		const {baseSubscription, billingFrequency} = user
 		user.addOnServices.forEach(service => {
-			console.log(service)
+
 			total.push(this.sanitizer(service.price))
 		})
 		
@@ -380,8 +378,6 @@ class MultiStepForm {
 
 	sanitizer(userCost) {
 		let temporal = parseFloat(userCost.replace(/[^0-9]/g, ''))
-		console.log(userCost, "usrCost")
-		console.log(temporal, "TEMP")
 		return temporal;
 	}
 
