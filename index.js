@@ -21,6 +21,7 @@ const formElements = {
 	addOns: document.querySelectorAll(".add-on"),
 	addOnCost: document.querySelectorAll("#addOnCost"),
 	serviceCosts: document.querySelectorAll("#service-cost"), 
+	mobileBtnCntr: document.getElementById("mobileBackground"), 
 	resume :{
 		coreSubscription: document.getElementById("resume-core"),
 		changeBasket: document.getElementById("resume-back"),
@@ -326,12 +327,19 @@ class MultiStepForm {
 		}
 		if (currentFormConfig.title === "Personal info" ) {
 			this.setInvalidForm();
+			formElements.stepSubtitle.style.display = "none"
 		}
 		if (currentFormConfig.title === "Select your plan" ) {
+			formElements.stepSubtitle.style.display = "block"
 			user.addOnServices = []
 			formElements.addOns.forEach(service => service.classList.remove("package-container-active"));
 			formElements.checkBox.forEach(box => box.checked = false)
 			this.setInvalidForm()
+		}
+
+		if (currentFormConfig.title === "Finishing up" ) {
+			formElements.nextButton.style.background ='#483EFF'
+			this.setCheckout()
 		}
 
 		if (currentFormConfig.title === "Finishing up" ) this.setCheckout()
