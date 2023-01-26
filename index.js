@@ -319,6 +319,7 @@ class MultiStepForm {
 		formElements.stepTitle.innerText = currentFormConfig.title;
 		formElements.stepSubtitle.innerText = currentFormConfig.Subtitle;
 		currentFormConfig.formToShow.style.display = "flex";
+		console.log('')
 		
 		// * Show/hide corresponding step
 		if (currentFormConfig.formToHide) {
